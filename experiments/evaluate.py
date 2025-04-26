@@ -129,8 +129,8 @@ def main(
             )
         tok = AutoTokenizer.from_pretrained(
             model_name,
-            cache_dir=CACHE_DIR,
-            trust_remote_code=True,
+            # cache_dir=CACHE_DIR,
+            # trust_remote_code=True,
         )
         tok.pad_token = tok.eos_token
     else:
