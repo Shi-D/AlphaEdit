@@ -34,6 +34,7 @@ class CounterFactDataset(Dataset):
         if size is not None:
             self.data = self.data[:size]
 
+        print('len(self.data)', len(self.data))
         print(f"Loaded dataset with {len(self)} elements")
 
     def __len__(self):

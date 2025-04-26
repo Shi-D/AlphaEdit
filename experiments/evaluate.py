@@ -423,6 +423,7 @@ def main(
         #         nethook.get_parameter(model, k)[...] = v.to("cuda")
 
         print("Evaluation took", time() - start)
+        
 def get_project(model, tok, layer, hparams):
     force_recompute = False
     cov = get_cov(
@@ -441,6 +442,7 @@ def get_project(model, tok, layer, hparams):
     small_singular_indices = (S < threshold).nonzero(as_tuple=True)[0]
     print(len(small_singular_indices))
     return U[:, small_singular_indices] @ U[:, small_singular_indices].T
+
 def window(seq, n=2):
     "Returns a sliding window (of width n) over data from the iterable"
     "   s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   "
