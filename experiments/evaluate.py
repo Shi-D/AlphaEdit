@@ -36,6 +36,12 @@ from util.globals import *
 from nse import NSEHyperParams
 from nse.nse_main import apply_nse_to_model
 from glue_eval.glue_eval import GLUEEval
+
+
+
+CACHE_DIR = "/lus/eagle/projects/PBML/yingdan/hf_cache"
+# CACHE_DIR = "/expanse/lustre/projects/iit120/yshi10/hf_cache"
+
 ALG_DICT = {
     "AlphaEdit": (AlphaEditHyperParams, apply_AlphaEdit_to_model),
     "MEMIT_seq": (MEMITHyperParams, apply_memit_seq_to_model),
@@ -115,8 +121,8 @@ def main(
     # Instantiate vanilla model
     if type(model_name) is str:
         print("Instantiating model")
-        model = AutoModelForCausalLM.from_pretrained(model_name).cuda()
-        tok = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=CACHE_DIR).cuda()
+        tok = AutoTokenizer.from_pretrained(model_name, cache_dir=CACHE_DIR)
         tok.pad_token = tok.eos_token
     else:
         model, tok = model_name
