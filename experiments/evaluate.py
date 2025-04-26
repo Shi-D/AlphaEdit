@@ -121,8 +121,16 @@ def main(
     # Instantiate vanilla model
     if type(model_name) is str:
         print("Instantiating model")
-        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=CACHE_DIR).cuda()
-        tok = AutoTokenizer.from_pretrained(model_name, cache_dir=CACHE_DIR)
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            cache_dir=CACHE_DIR,
+            device_map="auto",
+            torch_dtype=torch.float16,
+            )
+        tok = AutoTokenizer.from_pretrained(
+            model_name,
+            cache_dir=CACHE_DIR
+        )
         tok.pad_token = tok.eos_token
     else:
         model, tok = model_name
