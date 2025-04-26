@@ -694,9 +694,10 @@ def get_embedding_cov(mt):
         num_workers=0,
     )
     with torch.no_grad():
+        device = next(model.parameters()).device
         for batch_group in loader:
             for batch in batch_group:
-                batch = dict_to_(batch, "cuda")
+                batch = dict_to_(batch, device)
                 del batch["position_ids"]
                 with nethook.Trace(model, layername(mt.model, 0, "embed")) as tr:
                     model(**batch)

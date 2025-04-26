@@ -185,10 +185,11 @@ def layer_stats(
         num_workers=2,
     )
     batch_count = -(-(sample_size or len(ds)) // batch_size)
+    device = next(model.parameters()).device
     with torch.no_grad():
         for batch_group in progress(loader, total=batch_count):
             for batch in batch_group:
-                batch = dict_to_(batch, "cuda")
+                batch = dict_to_(batch, device)
                 with Trace(
                     model, layer_name, retain_input=True, retain_output=False, stop=True
                 ) as tr:
