@@ -49,9 +49,6 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(args.model_name).eval().cuda()
     set_requires_grad(False, model)
 
-    print('+'*20, args.model_name)
-    print('+'*20, args.sample_size)
-
 
     for layer_num in args.layers:
         print(

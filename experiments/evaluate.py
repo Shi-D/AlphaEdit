@@ -1,5 +1,4 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import json
 import shutil
 from itertools import islice
@@ -138,11 +137,6 @@ def main(
             device_map=device_map,
             torch_dtype=torch.float32,
             )
-        device = next(model.parameters()).device
-        print('model', device)
-        model = model.to('cuda')
-        device = next(model.parameters()).device
-        print('model', device)
 
         model = model.float()
         tok = AutoTokenizer.from_pretrained(
@@ -465,7 +459,7 @@ def main(
         
 def get_project(model, tok, layer, hparams):
     force_recompute = False
-    print('get_cov', get_cov)
+    print('get_cov')
     cov = get_cov(
         model,
         tok,

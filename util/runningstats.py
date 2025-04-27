@@ -1598,10 +1598,6 @@ def make_loader(
             sampler = FixedRandomSubsetSampler(
                 dataset, seed=random_sample, end=sample_size
             )
-            print('sample_size', sample_size)
-            print('===============sampler=============', type(sampler))
-            print('===============sampler=============', sampler[0])
-            print('===============sampler=============', len(sampler))
     return torch.utils.data.DataLoader(
         dataset, sampler=sampler, batch_size=batch_size, **kwargs
     )
