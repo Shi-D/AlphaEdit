@@ -118,15 +118,27 @@ def main(
         shutil.copyfile(params_path, run_dir / "params.json")
     print(f"Executing {alg_name} with parameters {hparams}")
 
+    #####
+    # GPU 设备映射
+    if torch.cuda.device_count() > 1:
+        print(f"Using {torch.cuda.device_count()} GPUs with device_map='auto'")
+        device_map = "auto"
+    else:
+        print("Using single GPU.")
+        device_map = {"": 0}
+
+
     # Instantiate vanilla model
     if type(model_name) is str:
         print("Instantiating model")
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
             cache_dir=CACHE_DIR,
-            device_map="auto",
+            device_map=device_map,
             torch_dtype=torch.float16,
             )
+        device = next(model.parameters()).device
+        print('model', device)
         model = model.to('cuda')
         device = next(model.parameters()).device
         print('model', device)
