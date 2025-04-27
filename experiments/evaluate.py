@@ -120,6 +120,7 @@ def main(
 
     #####
     # GPU 设备映射
+    print('----------------torch.cuda.device_count()', torch.cuda.device_count())
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs with device_map='auto'")
         device_map = "auto"
@@ -135,7 +136,7 @@ def main(
             model_name,
             cache_dir=CACHE_DIR,
             device_map=device_map,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.float32,
             )
         device = next(model.parameters()).device
         print('model', device)
