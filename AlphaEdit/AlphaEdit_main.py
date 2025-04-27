@@ -185,8 +185,10 @@ def get_cov(
         )
         COV_CACHE[key] = stat.mom2.moment().float().to("cpu")
 
+    device = next(model.parameters()).device
+    print(')'*10, 'device', device)
     return (
-        torch.inverse(COV_CACHE[key].to("cuda")) if inv else COV_CACHE[key].to("cuda")
+        torch.inverse(COV_CACHE[key].to(device)) if inv else COV_CACHE[key].to(device)
     )
 
 
