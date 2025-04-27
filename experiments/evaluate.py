@@ -225,6 +225,7 @@ def main(
     if alg_name == "AlphaEdit":
         print('AlphaEdit, get_project')
         for i, layer in enumerate(hparams.layers):
+            print('i', i, 'layer', layer)
             P[i,:,:] = get_project(model,tok,layer,hparams)
         torch.save(P, "null_space_project.pt")
     # hs = get_module_input_output_at_words(
@@ -446,6 +447,7 @@ def main(
         
 def get_project(model, tok, layer, hparams):
     force_recompute = False
+    print('get_cov', get_cov)
     cov = get_cov(
         model,
         tok,
@@ -460,7 +462,7 @@ def get_project(model, tok, layer, hparams):
     U, S, _ = torch.linalg.svd(cov, full_matrices=False)
     threshold = hparams.nullspace_threshold
     small_singular_indices = (S < threshold).nonzero(as_tuple=True)[0]
-    print(len(small_singular_indices))
+    print('small_singular_indices', len(small_singular_indices))
     return U[:, small_singular_indices] @ U[:, small_singular_indices].T
 
 def window(seq, n=2):
