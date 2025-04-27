@@ -189,7 +189,9 @@ def layer_stats(
     device = next(model.parameters()).device
     with torch.no_grad():
         for batch_group in progress(loader, total=batch_count):
+            print('++++++++++batch_group', batch_group)
             for batch in batch_group:
+                print('---------batch', batch)
                 batch = dict_to_(batch, device)
                 batch = {k: v.float() if v.dtype in [torch.float16, torch.bfloat16] else v for k, v in batch.items()}
                 with Trace(

@@ -240,6 +240,7 @@ def main(
             print('i', i, 'layer', layer)
             P[i,:,:] = get_project(model,tok,layer,hparams)
         torch.save(P, "null_space_project.pt")
+        print('torch.saved')
     # hs = get_module_input_output_at_words(
     #         model,
     #         tok,
@@ -253,9 +254,11 @@ def main(
     # del hs
     glue_save_location = str(run_dir) + '/' + 'glue_eval/'
     os.makedirs(glue_save_location, exist_ok=True)
+    print('glue_save_location', glue_save_location)
     cnt = 0
     for record_chunks in chunks(ds, num_edits):
         case_result_template = str(run_dir / "{}_edits-case_{}.json")
+        print('++case_result_template', case_result_template)
         print(f"=================================================================={cnt+1}_edit==================================================================")
         # Is the chunk already done?
         already_finished = True
@@ -278,10 +281,11 @@ def main(
         etc_args = dict(cache_template=cache_template) if any(alg in alg_name for alg in ["ROME", "MEMIT","AlphaEdit", "MEMIT_seq", "MEMIT_prune", "NSE"]) else dict()
         seq_args = dict(cache_c=cache_c) if any(alg in alg_name for alg in ["AlphaEdit", "MEMIT_seq", "NSE"]) else dict()
         nc_args = dict(P = P) if any(alg in alg_name for alg in ["AlphaEdit"]) else dict()
-        if cnt == 0 and args.downstream_eval_steps > 0:#do initial GLUE EVAL WITH ORIGINAL MODEL
+        if cnt == 0 and args.downstream_eval_steps > 0:  # do initial GLUE EVAL WITH ORIGINAL MODEL
             glue_results = {'edit_num': -1}
 
             out_file = glue_save_location + "base.json"
+            print('++out_file', out_file)
             
             glue_eval = GLUEEval(model, tok, number_of_tests = 100)
             glue_results = glue_eval.evaluate(glue_results, out_file, nli_flag = True, sst_flag = True, cola_flag=True, rte_flag=True, mmlu_flag = True, mrpc_flag = True)
