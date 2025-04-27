@@ -119,7 +119,6 @@ def main(
 
     #####
     # GPU 设备映射
-    print('----------------torch.cuda.device_count()', torch.cuda.device_count())
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs with device_map='auto'")
         device_map = "auto"
@@ -258,7 +257,7 @@ def main(
     cnt = 0
     for record_chunks in chunks(ds, num_edits):
         case_result_template = str(run_dir / "{}_edits-case_{}.json")
-        print('++case_result_template', case_result_template)
+        print('++case_result_template')
         print(f"=================================================================={cnt+1}_edit==================================================================")
         # Is the chunk already done?
         already_finished = True
@@ -286,7 +285,9 @@ def main(
 
             out_file = glue_save_location + "base.json"
             print('++out_file', out_file)
-            
+            print('----------')
+            print('----------')
+
             glue_eval = GLUEEval(model, tok, number_of_tests = 100)
             glue_results = glue_eval.evaluate(glue_results, out_file, nli_flag = True, sst_flag = True, cola_flag=True, rte_flag=True, mmlu_flag = True, mrpc_flag = True)
 
