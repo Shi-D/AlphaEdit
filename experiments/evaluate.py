@@ -138,7 +138,8 @@ def main(
         model_name = model.config._name_or_path
 
     # Load data
-    print("Loading dataset, attribute snippets, tf-idf data")
+    print("Loading dataset, attribute snippets, tf-idf data, skip_generation_tests", skip_generation_tests)
+    print('DATA_DIR', DATA_DIR)
     snips = AttributeSnippets(DATA_DIR) if not skip_generation_tests else None
     vec = get_tfidf_vectorizer(DATA_DIR) if not skip_generation_tests else None
 
@@ -147,7 +148,9 @@ def main(
 
     ds_class, ds_eval_method = DS_DICT[ds_name]
     ds = ds_class(DATA_DIR, tok=tok, size=dataset_size_limit)
+
     # Get cache templates
+    print('Get cache templates', 'use_cache', use_cache)
     cache_template = None
     if use_cache:
         if any(alg in alg_name for alg in ["MEMIT","AlphaEdit", "MEMIT_seq", "MEMIT_prune", "MEMIT_rect"]):
@@ -208,6 +211,7 @@ def main(
                     print(f"Cached k/v pair at {cache_fname}")
     if any(alg in alg_name for alg in ["AlphaEdit", "MEMIT_seq", "MEMIT_prune", "NSE"]):
         # Iterate through dataset
+        print('Iterate through dataset')
         W_out = nethook.get_parameter(model, f"{hparams.rewrite_module_tmp.format(hparams.layers[-1])}.weight")
         if hparams.model_name == "gpt2-xl":
             cache_c = torch.zeros((len(hparams.layers), W_out.shape[0], W_out.shape[0]), device="cpu")
@@ -219,6 +223,7 @@ def main(
                 P = torch.zeros((len(hparams.layers), W_out.shape[1], W_out.shape[1]), device="cpu")
         del W_out
     if alg_name == "AlphaEdit":
+        print('AlphaEdit, get_project')
         for i, layer in enumerate(hparams.layers):
             P[i,:,:] = get_project(model,tok,layer,hparams)
         torch.save(P, "null_space_project.pt")
