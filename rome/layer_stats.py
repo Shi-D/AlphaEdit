@@ -96,6 +96,7 @@ def layer_stats(
     """
     Function to load or compute cached stats.
     """
+    print(']]]]]]'*5, sample_size)
 
     def get_ds():
         # Load_From_File
