@@ -194,7 +194,11 @@ def layer_stats(
     with torch.no_grad():
         for batch_group in progress(loader, total=batch_count):
             for batch in batch_group:
+                print('+'*20)
+                print({k: v.dtype for k, v in batch.items()})
                 batch = dict_to_(batch, device)
+                print({k: v.dtype for k, v in batch.items()})
+                print('+'*20)
                 batch = {k: v.float() if v.dtype in [torch.float16, torch.bfloat16] else v for k, v in batch.items()}
                 with Trace(
                     model, layer_name, retain_input=True, retain_output=False, stop=True
