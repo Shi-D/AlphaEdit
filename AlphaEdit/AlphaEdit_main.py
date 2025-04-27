@@ -171,7 +171,7 @@ def get_cov(
 
     print(f"Retrieving covariance statistics for {model_name} @ {layer_name}.")
     if key not in COV_CACHE or force_recompute:
-        print('layer_stats', key)
+        print('--------------------layer_stats', key, mom2_n_samples)
         stat = layer_stats(
             model,
             tok,
