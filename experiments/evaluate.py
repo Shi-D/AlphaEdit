@@ -127,10 +127,10 @@ def main(
             device_map="auto",
             torch_dtype=torch.float16,
             )
-        model = model.cuda()
+        model = model.to('cuda')
         device = next(model.parameters()).device
         print('model', device)
-        
+
         model = model.float()
         tok = AutoTokenizer.from_pretrained(
             model_name,
